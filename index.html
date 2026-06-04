@@ -143,6 +143,41 @@
       );
     }
 
+    /* Hero h1 un poco más chico en celular, para separarlo del logo */
+    @media (max-width: 767px) {
+      #hero-heading { font-size: 34px; }
+    }
+    /* Hero h1 apenas más chico también en escritorio (solo este h1) */
+    @media (min-width: 768px) {
+      #hero-heading { font-size: 56px; }
+    }
+
+    /* ======== HERO CONTACT (llamar / cómo llegar) ======== */
+    .hero-contact__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.95);
+      font-size: 14px;
+      font-weight: 600;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.55);
+      transition: color 0.25s, opacity 0.25s;
+    }
+    .hero-contact__item:hover { color: #ffcbb4; }
+    .hero-contact__item .material-symbols-outlined {
+      font-size: 20px;
+      color: #ffcbb4;
+    }
+    .hero-contact__sep {
+      display: none;
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.35);
+    }
+    @media (min-width: 640px) {
+      .hero-contact__sep { display: inline-block; }
+    }
+
     /* Scroll reveal */
     .reveal {
       opacity: 0;
@@ -571,20 +606,56 @@
       100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
     }
 
-    /* Mobile menu */
-    #mobile-menu {
-      display: none;
+    /* Mobile menu — panel lateral moderno (drawer) */
+    #menu-backdrop {
       position: fixed;
       inset: 0;
-      z-index: 999;
-      background: rgba(248,250,244,0.97);
-      backdrop-filter: blur(20px);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2.5rem;
+      z-index: 998;
+      background: rgba(15,12,10,0.45);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    #mobile-menu.open { display: flex; }
+    #menu-backdrop.open { opacity: 1; visibility: visible; }
+
+    #mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 999;
+      height: 100%;
+      width: min(82vw, 340px);
+      background: #ffffff;
+      box-shadow: -16px 0 40px rgba(15,12,10,0.18);
+      display: flex;
+      flex-direction: column;
+      padding: 84px 28px 32px;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #mobile-menu.open { transform: translateX(0); }
+
+    #mobile-menu .mm-link {
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      font-weight: 600;
+      color: #191c19;
+      padding: 16px 4px;
+      border-bottom: 1px solid rgba(84,98,79,0.10);
+      transition: color 0.25s, padding-left 0.25s;
+    }
+    #mobile-menu .mm-link:hover { color: #d98a6c; padding-left: 12px; }
+    #mobile-menu .mm-cta {
+      margin-top: auto;
+      background: #d98a6c;
+      color: #fff;
+      text-align: center;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+    }
 
     /* Input focus */
     .field-input {
@@ -607,17 +678,17 @@
 <body class="bg-background text-on-background selection:bg-[#d98a6c]/20">
 
 <!-- ========== MOBILE MENU ========== -->
+<div id="menu-backdrop" aria-hidden="true"></div>
 <nav id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación">
-  <button id="close-menu" class="absolute top-6 right-6 p-2" aria-label="Cerrar menú">
-    <span class="material-symbols-outlined text-3xl">close</span>
+  <button id="close-menu" class="absolute top-5 right-5 p-2" aria-label="Cerrar menú">
+    <span class="material-symbols-outlined text-3xl text-on-surface">close</span>
   </button>
-  <a href="#services"  class="text-display-lg-mobile font-display-lg-mobile text-on-surface hover:text-primary transition-colors" onclick="closeMobileMenu()">Servicios</a>
-  <a href="#about"     class="text-display-lg-mobile font-display-lg-mobile text-on-surface hover:text-primary transition-colors" onclick="closeMobileMenu()">Sobre mí</a>
-  <a href="#formation" class="text-display-lg-mobile font-display-lg-mobile text-on-surface hover:text-primary transition-colors" onclick="closeMobileMenu()">Formación</a>
-  <a href="#booking"   class="text-display-lg-mobile font-display-lg-mobile text-on-surface hover:text-primary transition-colors" onclick="closeMobileMenu()">Contactame</a>
-  <a href="#booking"   class="bg-primary-container text-white px-10 py-5 rounded-lg text-[18px] font-semibold mt-6" onclick="closeMobileMenu()">Agendar turno</a>
+  <a href="#services"  class="mm-link" onclick="closeMobileMenu()">Servicios</a>
+  <a href="#about"     class="mm-link" onclick="closeMobileMenu()">Sobre mí</a>
+  <a href="#formation" class="mm-link" onclick="closeMobileMenu()">Formación</a>
+  <a href="#booking"   class="mm-link" onclick="closeMobileMenu()">Contactame</a>
+  <a href="#booking"   class="mm-cta" onclick="closeMobileMenu()">Agendar turno</a>
 </nav>
-
 <!-- ========== DEMO SAMPLE BANNER ========== -->
 <div id="demo-banner">Página web básica de muestra — así puede quedar la tuya</div>
 
@@ -672,6 +743,19 @@
           Quiero agendar mi primera sesión
         </a>
 
+      </div>
+
+      <!-- Contacto rápido: llamar / cómo llegar -->
+      <div class="hero-contact mt-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+        <a href="tel:+541100000000" class="hero-contact__item" aria-label="Llamar por teléfono">
+          <span class="material-symbols-outlined" aria-hidden="true">call</span>
+          <span>+54 11 XXXX-XXXX</span>
+        </a>
+        <span class="hero-contact__sep" aria-hidden="true"></span>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Palermo+CABA" target="_blank" rel="noopener" class="hero-contact__item" aria-label="Ver ubicación en el mapa">
+          <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+          <span>XXXXX, Palermo, CABA · cómo llegar</span>
+        </a>
       </div>
 
     </div>
@@ -1189,17 +1273,21 @@
   window.addEventListener('scroll', updateNav, { passive: true });
   updateNav();
 
-  // ----- Mobile menu -----
+  // ----- Mobile menu (drawer) -----
   const mobileMenu = document.getElementById('mobile-menu');
+  const menuBackdrop = document.getElementById('menu-backdrop');
   document.getElementById('open-menu').addEventListener('click', () => {
     mobileMenu.classList.add('open');
+    menuBackdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
   });
   function closeMobileMenu() {
     mobileMenu.classList.remove('open');
+    menuBackdrop.classList.remove('open');
     document.body.style.overflow = '';
   }
   document.getElementById('close-menu').addEventListener('click', closeMobileMenu);
+  menuBackdrop.addEventListener('click', closeMobileMenu);
 
   // ----- Scroll reveal (generic .reveal) -----
   const revealObserver = new IntersectionObserver((entries) => {
